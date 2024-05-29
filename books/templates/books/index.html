@@ -1,0 +1,51 @@
+﻿<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Filtering App</title>
+</head>
+<body>
+    <h1>Book Filtering App</h1>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title">
+    <br>
+    <label for="year">Publication Year:</label>
+    <input type="number" id="year" name="year">
+    <br>
+    <label for="edition">Edition:</label>
+    <input type="text" id="edition" name="edition">
+    <br>
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author">
+    <br>
+    <button onclick="filterBooks()">Filter</button>
+    <div id="bookList"></div>
+
+    <script>
+        async function filterBooks() {
+            const title = document.getElementById('title').value;
+            const year = document.getElementById('year').value;
+            const edition = document.getElementById('edition').value;
+            const author = document.getElementById('author').value;
+
+            const response = await fetch(`/books/filter/?title=${title}&publication_year=${year}&edition=${edition}&author=${author}`);
+            const data = await response.json();
+
+            displayBooks(data);
+        }
+
+        function displayBooks(books) {
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = '';
+
+            books.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.textContent = `Title: ${book.title}, Year: ${book.publication_year}, Edition: ${book.edition}, Authors: ${book.authors}`;
+                bookList.appendChild(bookDiv);
+            });
+        }
+    </script>
+</body>
+</html>
